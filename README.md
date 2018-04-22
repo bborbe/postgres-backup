@@ -2,7 +2,7 @@
 
 ## Install
 
-`go get github.com/bborbe/postgres-backup/bin/postgres-backup`
+`go get github.com/bborbe/postgres-backup`
 
 ## Run Backup
 
