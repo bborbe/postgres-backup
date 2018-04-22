@@ -10,8 +10,8 @@ import (
 	"github.com/bborbe/cron"
 	flag "github.com/bborbe/flagenv"
 	"github.com/bborbe/lock"
-	"github.com/bborbe/postgres_backup_cron/backup"
-	"github.com/bborbe/postgres_backup_cron/model"
+	"github.com/bborbe/postgres-backup/backup"
+	"github.com/bborbe/postgres-backup/model"
 	"github.com/golang/glog"
 )
 

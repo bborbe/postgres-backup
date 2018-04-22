@@ -10,7 +10,7 @@ import (
 	"io/ioutil"
 
 	"github.com/bborbe/io/util"
-	"github.com/bborbe/postgres_backup_cron/model"
+	"github.com/bborbe/postgres-backup/model"
 	"github.com/golang/glog"
 )
 
