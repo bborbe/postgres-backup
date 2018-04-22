@@ -2,14 +2,14 @@
 
 ## Install
 
-`go get github.com/bborbe/postgres_backup_cron/bin/postgres_backup_cron`
+`go get github.com/bborbe/postgres-backup/bin/postgres-backup`
 
 ## Run Backup
 
 One time
 
 ```
-postgres_backup_cron \
+postgres-backup \
 -logtostderr \
 -v=2 \
 -host=localhost \
@@ -26,7 +26,7 @@ postgres_backup_cron \
 Cron
 
 ```
-postgres_backup_cron \
+postgres-backup \
 -logtostderr \
 -v=2 \
 -host=localhost \

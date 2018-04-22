@@ -10,7 +10,7 @@ ENV PASSWORD S3CR3T
 ENV TARGETDIR /backup
 ENV WAIT 1h
 ENV ONE_TIME false
-ENV LOCK /var/run/postgres_backup_cron.lock
+ENV LOCK /var/run/postgres-backup.lock
 
 RUN set -x \
 	&& DEBIAN_FRONTEND=noninteractive apt-get update --quiet \
@@ -20,5 +20,5 @@ RUN set -x \
 
 VOLUME ["/backup"]
 
-COPY postgres_backup_cron /
-ENTRYPOINT ["/postgres_backup_cron"]
+COPY postgres-backup /
+ENTRYPOINT ["/postgres-backup"]

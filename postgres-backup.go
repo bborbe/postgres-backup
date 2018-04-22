@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	defaultLockName           = "/var/run/postgres_backup_cron.lock"
+	defaultLockName           = "/var/run/postgres-backup.lock"
 	defaultName               = "postgres"
 	parameterPostgresHost     = "host"
 	parameterPostgresPort     = "port"
