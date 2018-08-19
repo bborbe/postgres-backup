@@ -1,3 +1,8 @@
+FROM golang:1.10 AS build
+COPY . /go/src/github.com/bborbe/postgres-backup
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags "-s" -a -installsuffix cgo -o /postgres-backup ./src/github.com/bborbe/postgres-backup
+CMD ["/bin/bash"]
+
 FROM postgres:10
 MAINTAINER Benjamin Borbe <bborbe@rocketnews.de>
 
@@ -20,5 +25,5 @@ RUN set -x \
 
 VOLUME ["/backup"]
 
-COPY postgres-backup /
+COPY  --from=build postgres-backup /
 ENTRYPOINT ["/postgres-backup"]
