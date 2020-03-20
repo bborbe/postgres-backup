@@ -35,3 +35,12 @@ errcheck:
 addlicense:
 	@GO111MODULE=on go get github.com/google/addlicense
 	@addlicense -c "Benjamin Borbe" -y 2020 -l bsd ./*.go ./model/*.go ./backup/*.go
+
+build:
+	imagebuilder -t $(REGISTRY)/$(IMAGE):$(VERSION) -f Dockerfile:Dockerfile .
+
+upload:
+	docker push $(REGISTRY)/$(IMAGE):$(VERSION)
+
+clean:
+	docker rmi $(REGISTRY)/$(IMAGE):$(VERSION) || true
