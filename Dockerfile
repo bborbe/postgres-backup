@@ -1,9 +1,9 @@
-FROM golang:1.12.0 AS build
+FROM golang:1.13.9 AS build
 COPY . /go/src/github.com/bborbe/postgres-backup
 RUN CGO_ENABLED=0 GOOS=linux go build -ldflags "-s" -a -installsuffix cgo -o /postgres-backup ./src/github.com/bborbe/postgres-backup
 CMD ["/bin/bash"]
 
-FROM postgres:10
+FROM postgres:11.7
 MAINTAINER Benjamin Borbe <bborbe@rocketnews.de>
 
 ENV LOGLEVEL info

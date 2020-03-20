@@ -1,3 +1,7 @@
+// Copyright (c) 2020 Benjamin Borbe All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
 package backup
 
 import (
@@ -16,13 +20,13 @@ import (
 
 // Create backup
 func Create(
-name model.Name,
-host model.PostgresqlHost,
-port model.PostgresqlPort,
-user model.PostgresqlUser,
-pass model.PostgresqlPassword,
-database model.PostgresqlDatabase,
-targetDirectory model.TargetDirectory,
+	name model.Name,
+	host model.PostgresqlHost,
+	port model.PostgresqlPort,
+	user model.PostgresqlUser,
+	pass model.PostgresqlPassword,
+	database model.PostgresqlDatabase,
+	targetDirectory model.TargetDirectory,
 ) error {
 	//pg_dump -Z 9 -h ${POSTGRES_HOST} -p ${POSTGRES_PORT} -U ${POSTGRES_USER} -F c -b -v -f ${BACKUP_NAME} ${POSTGRES_DB}
 	backupfile := model.BuildBackupfileName(name, targetDirectory, database, time.Now())

@@ -4,60 +4,34 @@ ifeq ($(VERSION),)
 	VERSION := $(shell git fetch --tags; git describe --tags `git rev-list --tags --max-count=1`)
 endif
 
-all: test install
+precommit: ensure format test check addlicense
+	@echo "ready to commit"
 
-install:
-	GOBIN=$(GOPATH)/bin GO15VENDOREXPERIMENT=1 go install *.go
+ensure:
+	GO111MODULE=on go mod verify
+	GO111MODULE=on go mod vendor
 
-test:
-	go test -cover -race $(shell go list ./... | grep -v /vendor/)
-
-vet:
-	go tool vet .
-	go tool vet --shadow .
-
-lint:
-	golint -min_confidence 1 ./...
-
-errcheck:
-	errcheck -ignore '(Close|Write)' ./...
-
-check: lint vet errcheck
-
-goimports:
+format:
 	go get golang.org/x/tools/cmd/goimports
-
-format: goimports
 	find . -type f -name '*.go' -not -path './vendor/*' -exec gofmt -w "{}" +
 	find . -type f -name '*.go' -not -path './vendor/*' -exec goimports -w "{}" +
 
-prepare:
-	go get -u golang.org/x/tools/cmd/goimports
-	go get -u golang.org/x/lint/golint
-	go get -u github.com/kisielk/errcheck
-	go get -u github.com/bborbe/docker-utils/cmd/docker-remote-tag-exists
-	go get -u github.com/golang/dep/cmd/dep
+test:
+	GO111MODULE=on go test -cover -race $(shell go list ./... | grep -v /vendor/)
 
-clean:
-	docker rmi $(REGISTRY)/$(IMAGE):$(VERSION)
+check: lint vet errcheck
 
-build:
-	docker build --no-cache --rm=true -t $(REGISTRY)/$(IMAGE):$(VERSION) -f ./Dockerfile .
+lint:
+	@GO111MODULE=on go get golang.org/x/lint/golint
+	@golint -min_confidence 1 $(shell go list ./... | grep -v /vendor/)
 
-upload:
-	docker push $(REGISTRY)/$(IMAGE):$(VERSION)
+vet:
+	@GO111MODULE=on go vet $(shell go list ./... | grep -v /vendor/)
 
-trigger:
-	@go get github.com/bborbe/docker-utils/cmd/docker-remote-tag-exists
-	@exists=`docker-remote-tag-exists \
-		-registry=${REGISTRY} \
-		-repository="${IMAGE}" \
-		-credentialsfromfile \
-		-tag="${VERSION}" \
-		-alsologtostderr \
-		-v=0`; \
-	trigger="build"; \
-	if [ "$${exists}" = "true" ]; then \
-		trigger="skip"; \
-	fi; \
-	echo $${trigger}
+errcheck:
+	@GO111MODULE=on go get github.com/kisielk/errcheck
+	@errcheck -ignore '(Close|Write|Fprint)' $(shell go list ./... | grep -v /vendor/)
+
+addlicense:
+	@GO111MODULE=on go get github.com/google/addlicense
+	@addlicense -c "Benjamin Borbe" -y 2020 -l bsd ./*.go ./model/*.go ./backup/*.go

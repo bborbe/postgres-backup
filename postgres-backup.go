@@ -1,3 +1,7 @@
+// Copyright (c) 2020 Benjamin Borbe All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
 package main
 
 import (
@@ -7,6 +11,7 @@ import (
 	"runtime"
 
 	"context"
+
 	"github.com/bborbe/cron"
 	flag "github.com/bborbe/flagenv"
 	"github.com/bborbe/lock"
@@ -111,7 +116,7 @@ func exec() error {
 	action := func(ctx context.Context) error {
 		return backup.Create(name, host, port, user, pass, database, targetDir)
 	}
-	
+
 	var c cron.Cron
 	if *oneTimePtr {
 		c = cron.NewOneTimeCron(action)
