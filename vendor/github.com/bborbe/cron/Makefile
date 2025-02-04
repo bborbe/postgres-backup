@@ -1,28 +1,34 @@
-test:
-	GO15VENDOREXPERIMENT=1 go test -cover `glide novendor`
-vet:
-	go tool vet .
-	go tool vet --shadow .
-lint:
-	golint -min_confidence 1 ./...
-errcheck:
-	errcheck -ignore '(Close|Write)' ./...
-check: lint vet errcheck
-cov:
-	mkdir -p target
-	go test -coverprofile=target/coverage.out ./...
-	go tool cover -func=target/coverage.out
-	go tool cover -html=target/coverage.out
+
+default: precommit
+
+precommit: ensure format generate test check addlicense
+	@echo "ready to commit"
+
+ensure:
+	go mod tidy
+	go mod verify
+	go mod vendor
+
 format:
-	find . -name "*.go" -exec gofmt -w "{}" \;
-	goimports -w=true .
-prepare:
-	go get -u golang.org/x/tools/cmd/goimports
-	go get -u github.com/Masterminds/glide
-	go get -u github.com/golang/lint/golint
-	go get -u github.com/kisielk/errcheck
-	glide install
-update:
-	glide up
-clean:
-	rm -rf vendor target
+	go run -mod=vendor github.com/incu6us/goimports-reviser/v3 -project-name github.com/bborbe/cron -format -excludes vendor ./...
+
+generate:
+	rm -rf mocks avro
+	go generate -mod=vendor ./...
+
+test:
+	go test -mod=vendor -p=$${GO_TEST_PARALLEL:-1} -cover -race $(shell go list -mod=vendor ./... | grep -v /vendor/)
+
+check: vet errcheck vulncheck
+
+vet:
+	go vet -mod=vendor $(shell go list -mod=vendor ./... | grep -v /vendor/)
+
+errcheck:
+	go run -mod=vendor github.com/kisielk/errcheck -ignore '(Close|Write|Fprint)' $(shell go list -mod=vendor ./... | grep -v /vendor/)
+
+addlicense:
+	go run -mod=vendor github.com/google/addlicense -c "Benjamin Borbe" -y $$(date +'%Y') -l bsd $$(find . -name "*.go" -not -path './vendor/*')
+
+vulncheck:
+	go run -mod=vendor golang.org/x/vuln/cmd/govulncheck $(shell go list -mod=vendor ./... | grep -v /vendor/)

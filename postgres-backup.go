@@ -5,12 +5,10 @@
 package main
 
 import (
-	"fmt"
-	"time"
-
-	"runtime"
-
 	"context"
+	"fmt"
+	"runtime"
+	"time"
 
 	"github.com/bborbe/cron"
 	flag "github.com/bborbe/flagenv"
@@ -18,6 +16,8 @@ import (
 	"github.com/bborbe/postgres-backup/backup"
 	"github.com/bborbe/postgres-backup/model"
 	"github.com/golang/glog"
+
+	"github.com/bborbe/run"
 )
 
 const (
@@ -113,9 +113,9 @@ func exec() error {
 
 	glog.V(1).Infof("name: %s, host: %s, port: %d, user: %s, password-length: %d, database: %s, targetDir: %s, wait: %v, oneTime: %v, lockName: %s", name, host, port, user, len(pass), database, targetDir, wait, oneTime, lockName)
 
-	action := func(ctx context.Context) error {
+	action := run.Func(func(ctx context.Context) error {
 		return backup.Create(name, host, port, user, pass, database, targetDir)
-	}
+	})
 
 	var c cron.Cron
 	if *oneTimePtr {

@@ -6,12 +6,11 @@ package backup
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"strings"
 	"time"
-
-	"io/ioutil"
 
 	"github.com/bborbe/io/util"
 	"github.com/bborbe/postgres-backup/model"

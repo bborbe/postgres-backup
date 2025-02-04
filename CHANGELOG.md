@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.1.1
+
+- go mod update
+
 ## 2.1.0
 
 - Update Postgres to 11.7

@@ -1,28 +1,34 @@
+// Copyright (c) 2019 Benjamin Borbe All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
 package cron
 
 import (
 	"context"
 
+	"github.com/bborbe/errors"
+	"github.com/bborbe/run"
 	"github.com/golang/glog"
 )
 
-type cronOneTime struct {
-	action action
+func NewOneTimeCron(
+	action run.Runnable,
+) CronJob {
+	return &cronOneTime{
+		action: action,
+	}
 }
 
-func NewOneTimeCron(
-	action action,
-) *cronOneTime {
-	c := new(cronOneTime)
-	c.action = action
-	return c
+type cronOneTime struct {
+	action run.Runnable
 }
 
 func (c *cronOneTime) Run(ctx context.Context) error {
 	glog.V(4).Infof("run cron action started")
-	if err := c.action(ctx); err != nil {
-		glog.V(2).Infof("action failed -> exit")
-		return err
+	if err := c.action.Run(ctx); err != nil {
+		return errors.Wrapf(ctx, err, "run cron action failed")
 	}
+	glog.V(4).Infof("run cron action completed")
 	return nil
 }

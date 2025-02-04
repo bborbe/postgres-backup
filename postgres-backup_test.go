@@ -5,9 +5,8 @@
 package main
 
 import (
-	"testing"
-
 	"os"
+	"testing"
 
 	"github.com/golang/glog"
 )
