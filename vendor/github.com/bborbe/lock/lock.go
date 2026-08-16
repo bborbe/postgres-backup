@@ -38,7 +38,7 @@ func (l *lock) Lock() error {
 			return err
 		}
 	}
-	err = syscall.Flock(int(l.file.Fd()), syscall.LOCK_EX|syscall.LOCK_NB)
+	err = syscall.Flock(int(l.file.Fd()), syscall.LOCK_EX|syscall.LOCK_NB) //nolint:gosec
 	if err != nil {
 		glog.V(2).Info("lock fail, already locked")
 		return err
@@ -49,8 +49,7 @@ func (l *lock) Lock() error {
 
 func (l *lock) Unlock() error {
 	glog.V(2).Info("try unlock")
-	var err error
-	err = syscall.Flock(int(l.file.Fd()), syscall.LOCK_UN)
+	err := syscall.Flock(int(l.file.Fd()), syscall.LOCK_UN) //nolint:gosec
 	if err != nil {
 		glog.V(2).Info("unlock failed")
 		return err

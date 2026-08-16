@@ -1,0 +1,6 @@
+# Ignored vulnerabilities for this repo.
+# Add entries as:
+#
+# [[IgnoredVulns]]
+# id = "GHSA-xxxx-xxxx-xxxx"
+# reason = "explain why this is safe to ignore"

@@ -12,12 +12,26 @@ import (
 	"github.com/golang/glog"
 )
 
+// NewOneTimeCron creates a cron job that executes only once.
+// The job completes after a single execution of the provided action.
 func NewOneTimeCron(
 	action run.Runnable,
-) CronJob {
+) run.Runnable {
 	return &cronOneTime{
 		action: action,
 	}
+}
+
+// NewOneTimeCronWithOptions creates a one-time cron job with configurable options.
+// Applies timeout, metrics, and parallel execution controls to the single action execution.
+func NewOneTimeCronWithOptions(
+	action run.Runnable,
+	options Options,
+) run.Runnable {
+	return WrapWithOptions(
+		NewOneTimeCron(action),
+		options,
+	)
 }
 
 type cronOneTime struct {

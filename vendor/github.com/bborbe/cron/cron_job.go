@@ -5,56 +5,57 @@
 package cron
 
 import (
-	"context"
-	"time"
-
 	"github.com/bborbe/run"
+	libtime "github.com/bborbe/time"
 	"github.com/golang/glog"
 )
 
-//go:generate go run -mod=vendor github.com/maxbrunsfeld/counterfeiter/v6 -o mocks/cron-job.go --fake-name CronJob . CronJob
-type CronJob interface {
-	Run(ctx context.Context) error
-}
-
+// NewCronJob creates a new cron job with automatic strategy selection based on parameters.
+// Uses one-time execution if oneTime is true, expression-based scheduling if expression is provided,
+// or duration-based intervals if wait duration is specified.
 func NewCronJob(
 	oneTime bool,
 	expression Expression,
-	wait time.Duration,
+	wait libtime.Duration,
 	action run.Runnable,
-) CronJob {
-	return &cronJob{
-		oneTime:    oneTime,
-		expression: expression,
-		wait:       wait,
-		action:     action,
-	}
+) run.Runnable {
+	return NewCronJobWithOptions(
+		oneTime,
+		expression,
+		wait,
+		action,
+		DefaultOptions(),
+	)
 }
 
-type cronJob struct {
-	oneTime    bool
-	expression Expression
-	wait       time.Duration
-	action     run.Runnable
-}
-
-func (c *cronJob) Run(ctx context.Context) error {
-	var runner Cron
-	if c.oneTime {
+// NewCronJobWithOptions creates a new cron job with configurable options.
+// Applies the same strategy selection as NewCronJob but with additional wrappers for
+// timeout, metrics, and parallel execution control based on the provided options.
+func NewCronJobWithOptions(
+	oneTime bool,
+	expression Expression,
+	wait libtime.Duration,
+	action run.Runnable,
+	options Options,
+) run.Runnable {
+	if oneTime {
 		glog.V(2).Infof("create one-time cron")
-		runner = NewOneTimeCron(c.action)
-	} else if len(c.expression) > 0 {
-		glog.V(2).Infof("create cron with expression %s", c.expression)
-		runner = NewExpressionCron(
-			c.expression,
-			c.action,
-		)
-	} else {
-		glog.V(2).Infof("create cron with wait %v", c.wait)
-		runner = NewWaitCron(
-			c.wait,
-			c.action,
+		return NewOneTimeCronWithOptions(
+			action,
+			options,
 		)
 	}
-	return runner.Run(ctx)
+	if len(expression) > 0 {
+		glog.V(2).Infof("create cron with expression %s", expression)
+		return NewExpressionCronWithOptions(
+			expression,
+			action,
+			options,
+		)
+	}
+	glog.V(2).Infof("create cron with wait %v", wait)
+	return NewIntervalCron(
+		wait,
+		action,
+	)
 }
