@@ -15,6 +15,7 @@ import (
 	"github.com/bborbe/lock"
 	"github.com/bborbe/postgres-backup/backup"
 	"github.com/bborbe/postgres-backup/model"
+	libtime "github.com/bborbe/time"
 	"github.com/golang/glog"
 
 	"github.com/bborbe/run"
@@ -122,7 +123,7 @@ func exec() error {
 		c = cron.NewOneTimeCron(action)
 	} else {
 		c = cron.NewWaitCron(
-			*waitPtr,
+			libtime.Duration(*waitPtr),
 			action,
 		)
 	}

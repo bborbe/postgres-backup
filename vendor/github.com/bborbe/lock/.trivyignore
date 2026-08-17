@@ -1,0 +1,4 @@
+# Ignored CVEs for this repo.
+# Add entries as:
+#
+# CVE-XXXX-XXXXX  # reason

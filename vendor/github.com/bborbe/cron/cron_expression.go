@@ -6,10 +6,11 @@ package cron
 
 import (
 	"context"
+	"fmt"
 
+	"github.com/bborbe/errors"
 	"github.com/bborbe/run"
 	"github.com/golang/glog"
-	"github.com/pkg/errors"
 	"github.com/robfig/cron/v3"
 )
 
@@ -27,31 +28,42 @@ import (
 // 0 0 * * * 0
 type Expression string
 
+// String returns the cron expression as a string.
 func (e Expression) String() string {
 	return string(e)
 }
 
+// Ptr returns a pointer to the Expression value.
 func (e Expression) Ptr() *Expression {
 	return &e
 }
 
+// Bytes returns the cron expression as a byte slice.
 func (e Expression) Bytes() []byte {
 	return []byte(e)
 }
 
-func CreateDefaultParser() cron.Parser {
-	return cron.NewParser(cron.Second | cron.Minute | cron.Hour | cron.Dom | cron.Month | cron.Dow | cron.Descriptor)
-}
-
+// NewExpressionCron creates a cron job that executes based on a cron expression.
+// The expression supports standard cron format and common descriptors like '@every 1h'.
 func NewExpressionCron(
 	expression Expression,
 	action run.Runnable,
-) CronJob {
+) run.Runnable {
 	return &cronExpression{
 		expression: expression,
 		action:     action,
 		parser:     CreateDefaultParser(),
 	}
+}
+
+// NewExpressionCronWithOptions creates an expression-based cron job with configurable options.
+// Applies timeout, metrics, and parallel execution controls to individual action executions.
+func NewExpressionCronWithOptions(
+	expression Expression,
+	action run.Runnable,
+	options Options,
+) run.Runnable {
+	return NewExpressionCron(expression, WrapWithOptions(action, options))
 }
 
 type cronExpression struct {
@@ -64,7 +76,11 @@ func (c *cronExpression) Run(ctx context.Context) error {
 	glog.V(4).Infof("register cron actions")
 	schedule, err := c.parser.Parse(c.expression.String())
 	if err != nil {
-		return errors.Wrapf(err, "parse cron expression '%s' failed", c.expression)
+		return errors.Wrap(
+			ctx,
+			err,
+			fmt.Sprintf("parse cron expression '%s' failed", c.expression),
+		)
 	}
 
 	cronJob := cron.New()
