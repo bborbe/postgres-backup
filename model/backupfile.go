@@ -6,10 +6,9 @@ package model
 
 import (
 	"fmt"
+	"log/slog"
 	"os"
 	"time"
-
-	"github.com/golang/glog"
 )
 
 type BackupFilename string
@@ -29,13 +28,13 @@ func (b BackupFilename) String() string {
 func (b BackupFilename) Exists() bool {
 	fileInfo, err := os.Stat(b.String())
 	if err != nil {
-		glog.V(2).Infof("file %v exists => false", b)
+		slog.Debug("file not exists", "file", b)
 		return false
 	}
 	if fileInfo.Size() == 0 {
-		glog.V(2).Infof("file %v empty => false", b)
+		slog.Debug("file empty", "file", b)
 		return false
 	}
-	glog.V(2).Infof("file %v exists and not empty => true", b)
+	slog.Debug("file exists and not empty", "file", b)
 	return true
 }

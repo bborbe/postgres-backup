@@ -5,68 +5,54 @@
 package model
 
 import (
-	"io/ioutil"
 	"os"
 	"testing"
 	"time"
 
-	. "github.com/bborbe/assert"
-	"github.com/golang/glog"
+	. "github.com/onsi/ginkgo/v2"
+	. "github.com/onsi/gomega"
+	"github.com/onsi/gomega/format"
 )
 
-func TestMain(m *testing.M) {
-	exit := m.Run()
-	glog.Flush()
-	os.Exit(exit)
-}
+var _ = Describe("BackupFilename", func() {
+	Describe("BuildBackupfileName", func() {
+		It("builds the expected filename", func() {
+			filename := BuildBackupfileName("myname", "/tmp", "mydb", time.Unix(1313123123, 0))
+			Expect(filename.String()).To(Equal("/tmp/myname_mydb_2011-08-12.dump"))
+		})
+	})
 
-func TestBuildBackupfileName(t *testing.T) {
-	filename := BuildBackupfileName("myname", "/tmp", "mydb", time.Unix(1313123123, 0))
-	if err := AssertThat(filename.String(), Is("/tmp/myname_mydb_2011-08-12.dump")); err != nil {
-		t.Fatal(err)
-	}
-}
+	Describe("Exists", func() {
+		It("returns true when the file exists and is not empty", func() {
+			file, err := os.CreateTemp("", "backupfile")
+			Expect(err).NotTo(HaveOccurred())
+			defer func() { _ = os.Remove(file.Name()) }()
 
-func TestExistsReturnTrueIfExistsAndNotEmpty(t *testing.T) {
-	file, err := ioutil.TempFile("", "backupfile")
-	if err := AssertThat(err, NilValue()); err != nil {
-		t.Fatal(err)
-	}
-	defer func() {
-		_ = os.Remove(file.Name())
-	}()
+			_, err = file.WriteString("hello world")
+			Expect(err).NotTo(HaveOccurred())
+			file.Close()
 
-	_, err = file.WriteString("hello world")
-	if err := AssertThat(err, NilValue()); err != nil {
-		t.Fatal(err)
-	}
-	file.Close()
+			Expect(BackupFilename(file.Name()).Exists()).To(BeTrue())
+		})
 
-	b := BackupFilename(file.Name())
-	if err := AssertThat(b.Exists(), Is(true)); err != nil {
-		t.Fatal(err)
-	}
-}
+		It("returns false when the file exists but is empty", func() {
+			file, err := os.CreateTemp("", "backupfile")
+			Expect(err).NotTo(HaveOccurred())
+			defer func() { _ = os.Remove(file.Name()) }()
+			file.Close()
 
-func TestExistsReturnFalseIfExistsButEmpty(t *testing.T) {
-	file, err := ioutil.TempFile("", "backupfile")
-	if err := AssertThat(err, NilValue()); err != nil {
-		t.Fatal(err)
-	}
-	defer func() {
-		_ = os.Remove(file.Name())
-	}()
-	file.Close()
+			Expect(BackupFilename(file.Name()).Exists()).To(BeFalse())
+		})
 
-	b := BackupFilename(file.Name())
-	if err := AssertThat(b.Exists(), Is(false)); err != nil {
-		t.Fatal(err)
-	}
-}
+		It("returns false when the file does not exist", func() {
+			Expect(BackupFilename("/filedoesnotexists").Exists()).To(BeFalse())
+		})
+	})
+})
 
-func TestExistsReturnFalseIfNotExisting(t *testing.T) {
-	b := BackupFilename("/filedoesnotexists")
-	if err := AssertThat(b.Exists(), Is(false)); err != nil {
-		t.Fatal(err)
-	}
+func TestModel(t *testing.T) {
+	time.Local = time.UTC
+	format.TruncatedDiff = false
+	RegisterFailHandler(Fail)
+	RunSpecs(t, "Model Suite")
 }

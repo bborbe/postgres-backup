@@ -6,15 +6,27 @@ package main_test
 
 import (
 	"testing"
+	"time"
 
+	. "github.com/onsi/ginkgo/v2"
+	. "github.com/onsi/gomega"
+	"github.com/onsi/gomega/format"
 	"github.com/onsi/gomega/gexec"
 )
 
-// TestMainCompiles verifies the main package links — without this, a build
-// failure in main.go would not be caught by make test.
-func TestMainCompiles(t *testing.T) {
-	defer gexec.CleanupBuildArtifacts()
-	if _, err := gexec.Build(".", "-mod=vendor", "-buildvcs=false"); err != nil {
-		t.Fatalf("main package failed to build: %v", err)
-	}
+var _ = Describe("Main", func() {
+	It("Compiles", func() {
+		var err error
+		_, err = gexec.Build(".", "-mod=vendor", "-buildvcs=false")
+		Expect(err).NotTo(HaveOccurred())
+	})
+})
+
+func TestSuite(t *testing.T) {
+	time.Local = time.UTC
+	format.TruncatedDiff = false
+	RegisterFailHandler(Fail)
+	suiteConfig, reporterConfig := GinkgoConfiguration()
+	suiteConfig.Timeout = 60 * time.Second
+	RunSpecs(t, "Main Suite", suiteConfig, reporterConfig)
 }

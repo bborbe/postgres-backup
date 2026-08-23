@@ -8,9 +8,7 @@ import (
 	"context"
 	"log/slog"
 	"os"
-	"os/signal"
 	"runtime"
-	"syscall"
 	"time"
 
 	"github.com/bborbe/cron"
@@ -43,15 +41,7 @@ type backupConfig struct {
 }
 
 func main() {
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-
-	sigCh := make(chan os.Signal, 1)
-	signal.Notify(sigCh, syscall.SIGTERM, syscall.SIGINT)
-	go func() {
-		<-sigCh
-		cancel()
-	}()
+	ctx := run.ContextWithSig(context.Background())
 
 	if err := Run(ctx, os.Args[1:]); err != nil {
 		slog.Error("postgres-backup failed", "error", err)
@@ -150,7 +140,7 @@ func exec(ctx context.Context, config backupConfig) error {
 	)
 
 	action := run.Func(func(ctx context.Context) error {
-		return backup.Create(name, host, port, user, pass, database, targetDir)
+		return backup.Create(ctx, time.Now, name, host, port, user, pass, database, targetDir)
 	})
 
 	var c cron.Cron

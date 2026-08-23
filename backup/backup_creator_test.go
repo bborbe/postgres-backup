@@ -5,22 +5,25 @@
 package backup
 
 import (
-	"os"
+	"context"
 	"testing"
+	"time"
 
-	. "github.com/bborbe/assert"
-	"github.com/golang/glog"
+	. "github.com/onsi/ginkgo/v2"
+	. "github.com/onsi/gomega"
+	"github.com/onsi/gomega/format"
 )
 
-func TestMain(m *testing.M) {
-	exit := m.Run()
-	glog.Flush()
-	os.Exit(exit)
-}
+var _ = Describe("runCommand", func() {
+	It("runs a command successfully", func() {
+		err := runCommand(context.Background(), "ls", "/")
+		Expect(err).NotTo(HaveOccurred())
+	})
+})
 
-func TestRunCommand(t *testing.T) {
-	err := runCommand("ls", "/")
-	if err := AssertThat(err, NilValue()); err != nil {
-		t.Fatal(err)
-	}
+func TestBackup(t *testing.T) {
+	time.Local = time.UTC
+	format.TruncatedDiff = false
+	RegisterFailHandler(Fail)
+	RunSpecs(t, "Backup Suite")
 }
