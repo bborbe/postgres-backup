@@ -13,8 +13,9 @@ import (
 	"time"
 
 	"github.com/bborbe/io/util"
-	"github.com/bborbe/postgres-backup/model"
 	"github.com/golang/glog"
+
+	"github.com/bborbe/postgres-backup/model"
 )
 
 // Create backup

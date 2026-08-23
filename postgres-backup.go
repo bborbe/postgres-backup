@@ -6,126 +6,161 @@ package main
 
 import (
 	"context"
-	"fmt"
+	"log/slog"
+	"os"
+	"os/signal"
 	"runtime"
+	"syscall"
 	"time"
 
 	"github.com/bborbe/cron"
-	flag "github.com/bborbe/flagenv"
+	"github.com/bborbe/errors"
 	"github.com/bborbe/lock"
+	"github.com/bborbe/run"
+	libtime "github.com/bborbe/time"
+	"github.com/spf13/cobra"
+
 	"github.com/bborbe/postgres-backup/backup"
 	"github.com/bborbe/postgres-backup/model"
-	libtime "github.com/bborbe/time"
-	"github.com/golang/glog"
-
-	"github.com/bborbe/run"
 )
 
 const (
-	defaultLockName           = "/var/run/postgres-backup.lock"
-	defaultName               = "postgres"
-	parameterPostgresHost     = "host"
-	parameterPostgresPort     = "port"
-	parameterPostgresDatabase = "database"
-	parameterPostgresUser     = "username"
-	parameterPostgresPassword = "password"
-	parameterTargetDir        = "targetdir"
-	parameterWait             = "wait"
-	parameterOneTime          = "one-time"
-	parameterLock             = "lock"
-	parameterName             = "name"
+	defaultLockName = "/var/run/postgres-backup.lock"
+	defaultName     = "postgres"
 )
 
-var (
-	hostPtr      = flag.String(parameterPostgresHost, "", "host")
-	portPtr      = flag.Int(parameterPostgresPort, 5432, "port")
-	databasePtr  = flag.String(parameterPostgresDatabase, "", "database")
-	userPtr      = flag.String(parameterPostgresUser, "", "username")
-	passwordPtr  = flag.String(parameterPostgresPassword, "", "password")
-	waitPtr      = flag.Duration(parameterWait, time.Minute*60, "wait")
-	oneTimePtr   = flag.Bool(parameterOneTime, false, "exit after first backup")
-	targetDirPtr = flag.String(parameterTargetDir, "", "target directory")
-	lockPtr      = flag.String(parameterLock, defaultLockName, "lock")
-	namePtr      = flag.String(parameterName, defaultName, "name")
-)
+type backupConfig struct {
+	host      string
+	port      int
+	database  string
+	username  string
+	password  string
+	targetDir string
+	wait      time.Duration
+	oneTime   bool
+	lockName  string
+	name      string
+}
 
 func main() {
-	defer glog.Flush()
-	glog.CopyStandardLogTo("info")
-	flag.Parse()
-	runtime.GOMAXPROCS(runtime.NumCPU())
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 
-	if err := do(); err != nil {
-		glog.Exit(err)
+	sigCh := make(chan os.Signal, 1)
+	signal.Notify(sigCh, syscall.SIGTERM, syscall.SIGINT)
+	go func() {
+		<-sigCh
+		cancel()
+	}()
+
+	if err := Run(ctx, os.Args[1:]); err != nil {
+		slog.Error("postgres-backup failed", "error", err)
+		os.Exit(1)
 	}
 }
 
-func do() error {
-	lockName := *lockPtr
-	l := lock.NewLock(lockName)
+// Run parses the CLI arguments and runs the backup loop until the context is
+// cancelled or a fatal error occurs.
+func Run(ctx context.Context, args []string) error {
+	config := backupConfig{}
+
+	rootCmd := &cobra.Command{
+		Use:          "postgres-backup",
+		Short:        "Backup a PostgreSQL database on a schedule",
+		SilenceUsage: true,
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			slog.SetDefault(slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelInfo})))
+			runtime.GOMAXPROCS(runtime.NumCPU())
+			return do(ctx, config)
+		},
+	}
+	rootCmd.Flags().StringVar(&config.host, "host", "", "PostgreSQL host")
+	rootCmd.Flags().IntVar(&config.port, "port", 5432, "PostgreSQL port")
+	rootCmd.Flags().StringVar(&config.database, "database", "", "PostgreSQL database")
+	rootCmd.Flags().StringVar(&config.username, "username", "", "PostgreSQL username")
+	rootCmd.Flags().StringVar(&config.password, "password", "", "PostgreSQL password")
+	rootCmd.Flags().StringVar(&config.targetDir, "targetdir", "", "target directory")
+	rootCmd.Flags().DurationVar(&config.wait, "wait", time.Hour, "wait between backups")
+	rootCmd.Flags().BoolVar(&config.oneTime, "one-time", false, "exit after first backup")
+	rootCmd.Flags().StringVar(&config.lockName, "lock", defaultLockName, "lock file path")
+	rootCmd.Flags().StringVar(&config.name, "name", defaultName, "backup name")
+
+	rootCmd.SetArgs(args)
+	return rootCmd.ExecuteContext(ctx)
+}
+
+func do(ctx context.Context, config backupConfig) error {
+	l := lock.NewLock(config.lockName)
 	if err := l.Lock(); err != nil {
-		return err
+		return errors.Wrapf(ctx, err, "acquire lock %s", config.lockName)
 	}
 	defer func() {
 		if err := l.Unlock(); err != nil {
-			glog.Warningf("unlock failed: %v", err)
+			slog.Warn("unlock failed", "error", err)
 		}
 	}()
 
-	glog.V(1).Info("backup postgres cron started")
-	defer glog.V(1).Info("backup postgres cron finished")
+	slog.Info("backup postgres cron started")
+	defer slog.Info("backup postgres cron finished")
 
-	return exec()
+	return exec(ctx, config)
 }
 
-func exec() error {
-	host := model.PostgresqlHost(*hostPtr)
+func exec(ctx context.Context, config backupConfig) error {
+	host := model.PostgresqlHost(config.host)
 	if len(host) == 0 {
-		return fmt.Errorf("parameter %s missing", parameterPostgresHost)
+		return errors.Errorf(ctx, "parameter %s missing", "host")
 	}
-	port := model.PostgresqlPort(*portPtr)
+	port := model.PostgresqlPort(config.port)
 	if port <= 0 {
-		return fmt.Errorf("parameter %s missing", parameterPostgresPort)
+		return errors.Errorf(ctx, "parameter %s missing", "port")
 	}
-	user := model.PostgresqlUser(*userPtr)
+	user := model.PostgresqlUser(config.username)
 	if len(user) == 0 {
-		return fmt.Errorf("parameter %s missing", parameterPostgresUser)
+		return errors.Errorf(ctx, "parameter %s missing", "username")
 	}
-	pass := model.PostgresqlPassword(*passwordPtr)
+	pass := model.PostgresqlPassword(config.password)
 	if len(pass) == 0 {
-		return fmt.Errorf("parameter %s missing", parameterPostgresPassword)
+		return errors.Errorf(ctx, "parameter %s missing", "password")
 	}
-	database := model.PostgresqlDatabase(*databasePtr)
+	database := model.PostgresqlDatabase(config.database)
 	if len(database) == 0 {
-		return fmt.Errorf("parameter %s missing", parameterPostgresDatabase)
+		return errors.Errorf(ctx, "parameter %s missing", "database")
 	}
-	targetDir := model.TargetDirectory(*targetDirPtr)
+	targetDir := model.TargetDirectory(config.targetDir)
 	if len(targetDir) == 0 {
-		return fmt.Errorf("parameter %s missing", parameterTargetDir)
+		return errors.Errorf(ctx, "parameter %s missing", "targetdir")
 	}
-	name := model.Name(*namePtr)
+	name := model.Name(config.name)
 	if len(name) == 0 {
-		return fmt.Errorf("parameter %s missing", parameterName)
+		return errors.Errorf(ctx, "parameter %s missing", "name")
 	}
 
-	oneTime := *oneTimePtr
-	wait := *waitPtr
-	lockName := *lockPtr
-
-	glog.V(1).Infof("name: %s, host: %s, port: %d, user: %s, password-length: %d, database: %s, targetDir: %s, wait: %v, oneTime: %v, lockName: %s", name, host, port, user, len(pass), database, targetDir, wait, oneTime, lockName)
+	slog.Info("backup postgres configuration",
+		"name", name,
+		"host", host,
+		"port", port,
+		"user", user,
+		"passwordLength", len(pass),
+		"database", database,
+		"targetDir", targetDir,
+		"wait", config.wait,
+		"oneTime", config.oneTime,
+		"lockName", config.lockName,
+	)
 
 	action := run.Func(func(ctx context.Context) error {
 		return backup.Create(name, host, port, user, pass, database, targetDir)
 	})
 
 	var c cron.Cron
-	if *oneTimePtr {
+	if config.oneTime {
 		c = cron.NewOneTimeCron(action)
 	} else {
 		c = cron.NewWaitCron(
-			libtime.Duration(*waitPtr),
+			libtime.Duration(config.wait),
 			action,
 		)
 	}
-	return c.Run(context.Background())
+	return c.Run(ctx)
 }
