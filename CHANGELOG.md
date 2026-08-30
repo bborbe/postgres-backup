@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+- chore: update Go to 1.27.0 and github.com/bborbe/cron to v1.8.28, github.com/bborbe/errors to v1.6.0, github.com/bborbe/lock to v1.0.5, github.com/bborbe/run to v1.10.1, github.com/bborbe/time to v1.27.11
+
 ## 2.1.2
 
 - chore: add .maintainer.yaml to enable automated Go version and dependency updates

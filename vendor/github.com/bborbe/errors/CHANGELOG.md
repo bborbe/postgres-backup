@@ -9,6 +9,32 @@ Please choose versions by [Semantic Versioning](http://semver.org/).
 * PATCH version when you make backwards-compatible bug fixes.
 
 
+## v1.6.0
+
+- feat: opt into `autoMerge.trivial` for mechanically-trivial update PRs
+
+## v1.5.21
+
+- chore: update Go to 1.27.0
+
+## v1.5.20
+
+- chore: Run gofmt last in `format` target so golines wrapping is normalized before the gofmt lint check
+- chore: Bump golangci-lint to v2.13.1 and errcheck to v1.20.0 for Go 1.27 toolchain compatibility
+
+## v1.5.19
+
+- bump ginkgo to v2.32.1
+- update go.sum
+
+## v1.5.18
+
+- chore(security): bump Go 1.26.5 -> 1.26.6 (stdlib GO-2026-5026 / GO-2026-5972 / GO-2026-6090)
+
+- chore: opt into `goUpdate.autoUpdate` in `.maintainer.yaml` so github-update-go-watcher may file Go-version update tasks for this repo
+
+- chore(security): bump `golang.org/x/mod` v0.37.0 -> v0.40.0 (GO-2026-6179 / GO-2026-6180, CVE-2026-56864 / CVE-2026-56865)
+
 ## v1.5.17
 
 - Bump `golang.org/x/text` to v0.39.0 (CVE-2026-56852)

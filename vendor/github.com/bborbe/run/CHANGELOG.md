@@ -8,6 +8,28 @@ Please choose versions by [Semantic Versioning](http://semver.org/).
 * MINOR version when you add functionality in a backwards-compatible manner, and
 * PATCH version when you make backwards-compatible bug fixes.
 
+## v1.10.1
+
+- chore: update Go to 1.27.0 and github.com/bborbe/errors to v1.6.0, github.com/getsentry/sentry-go to v0.49.0
+
+## v1.10.0
+
+- feat: opt into `autoMerge.trivial` for mechanically-trivial update PRs
+
+## v1.9.37
+
+- fix: Run gofmt last in the `format` target so golines' wrapping is normalized before the gofmt lint check
+- fix: Bump golangci-lint to v2.13.1 and errcheck to v1.20.0 (Go 1.27 toolchain compatibility)
+
+## v1.9.36
+
+- bump github.com/bborbe/errors to v1.5.18
+- bump github.com/onsi/ginkgo/v2 to v2.32.1
+
+## v1.9.35
+
+- update Go to 1.26.6 and update dependencies (fixes GO-2026-5972, GO-2026-6090, CVE-2026-56864, CVE-2026-56865)
+
 ## v1.9.34
 
 - fix: justify the #nosec G118 directive in ContextWithSig

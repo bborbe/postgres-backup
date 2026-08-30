@@ -18,7 +18,7 @@ func Nil(value any) HasValidation {
 	return HasValidationFunc(func(ctx context.Context) error {
 		// reflect.ValueOf(value).IsZero()
 		if value == nil ||
-			(reflect.ValueOf(value).Kind() == reflect.Ptr && reflect.ValueOf(value).IsNil()) {
+			(reflect.ValueOf(value).Kind() == reflect.Pointer && reflect.ValueOf(value).IsNil()) {
 			return nil
 		}
 		return errors.Wrapf(ctx, Error, "should be nil")

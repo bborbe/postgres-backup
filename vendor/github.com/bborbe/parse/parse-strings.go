@@ -117,7 +117,7 @@ func isSliceOfHasString(value interface{}) bool {
 	}
 
 	// Also check for pointer types implementing HasString
-	if elemType.Kind() == reflect.Ptr {
+	if elemType.Kind() == reflect.Pointer {
 		if elemType.Implements(hasStringInterfaceType) {
 			return true
 		}
