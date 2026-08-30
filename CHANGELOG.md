@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 2.1.2
 
 - chore: add .maintainer.yaml to enable automated Go version and dependency updates
 - fix: modernize postgres-backup — cobra CLI (replaces flagenv), log/slog (replaces glog), bborbe/errors wrapping with context threading, main_test gexec compile check, tools.go → tools.env, postgres:17 base image
