@@ -8,6 +8,31 @@ Please choose versions by [Semantic Versioning](http://semver.org/).
 * MINOR version when you add functionality in a backwards-compatible manner, and
 * PATCH version when you make backwards-compatible bug fixes.
 
+## v1.4.23
+
+- chore: update github.com/bborbe/errors to v1.5.21
+
+## v1.4.22
+
+- chore: update Go to 1.27.0 and update dependencies
+
+## v1.4.21
+
+- chore: Run gofmt last in the `format` target so golines' wrapping is normalized before the gofmt lint check
+- chore: Bump golangci-lint to v2.13.1 (fixes staticcheck `buildir` panic on Go 1.27 AST)
+- chore: Bump errcheck to v1.20.0 (fixes missing `context` package types on Go 1.27)
+- fix: Use `reflect.Pointer` instead of deprecated `reflect.Ptr` in Nil validation (new govet inline check under golangci-lint v2.13.1)
+
+## v1.4.20
+
+- Update github.com/bborbe/errors to v1.5.18
+- Update Ginkgo to v2.32.1
+- Enable automatic Go dependency updates
+
+## v1.4.19
+
+- update Go to 1.26.6 and update dependencies
+
 ## v1.4.18
 
 - Bump `golang.org/x/text` to v0.39.0 (CVE-2026-56852)

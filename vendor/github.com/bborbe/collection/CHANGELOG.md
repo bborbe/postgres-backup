@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## v1.20.25
+
+- chore: update github.com/bborbe/errors to v1.5.21
+
+## v1.20.24
+
+- chore: update Go to 1.27.0 and github.com/bborbe/errors to v1.5.20, github.com/bborbe/run to v1.9.37, github.com/onsi/ginkgo/v2 to v2.32.1
+
+## v1.20.23
+
+- chore: Bump golangci-lint to v2.13.1 and errcheck to v1.20.0 for Go 1.27 toolchain compatibility
+- chore: Run `gofmt -w` last in the `format` target so golines wrapping is normalized before the gofmt lint check
+
+## v1.20.22
+
+- chore: update dependencies (bborbe/errors v1.5.18, bborbe/run v1.9.35)
+
+## v1.20.21
+
+- update Go to 1.26.6 and update dependencies (GO-2026-5972, GO-2026-6090)
+
 ## v1.20.20
 
 - update Go to 1.26.5 and update dependencies

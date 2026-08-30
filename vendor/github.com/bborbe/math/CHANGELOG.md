@@ -2,6 +2,40 @@
 
 All notable changes to this project will be documented in this file.
 
+## v1.4.8
+
+- chore: update github.com/bborbe/collection to v1.20.25
+
+## v1.4.7
+
+- chore: update go module dependencies
+
+## v1.4.6
+
+- chore: update github.com/bborbe/collection to v1.20.24
+
+## v1.4.5
+
+- chore: update go module dependencies
+
+## v1.4.4
+
+- chore: update Go to 1.27.0 and github.com/bborbe/collection to v1.20.23, github.com/onsi/ginkgo/v2 to v2.32.1
+
+## v1.3.21
+
+- chore: Reorder format target so gofmt -w runs last after golines (Go 1.27 tooling compatibility)
+- chore: Bump golangci-lint to v2.13.1 (fixes staticcheck buildir panic on Go 1.27 AST)
+- chore: Bump errcheck to v1.20.0 (fixes `package "context" without types` on Go 1.27)
+
+## v1.3.20
+
+- update dependencies: github.com/bborbe/collection to v1.20.21, github.com/bborbe/errors to v1.5.18, github.com/bborbe/run to v1.9.35
+
+## v1.3.19
+
+- update Go to 1.26.6 and dependencies (fixes GO-2026-5972, GO-2026-6090, CVE-2026-56864, CVE-2026-56865)
+
 ## v1.3.18
 
 - docs: add a License section to the README

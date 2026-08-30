@@ -3,35 +3,35 @@
 github.com/Masterminds/semver/v3
 # github.com/bborbe/assert v0.0.0-20181116222016-22a6c6341415
 ## explicit
-# github.com/bborbe/collection v1.20.20
-## explicit; go 1.26.5
+# github.com/bborbe/collection v1.20.25
+## explicit; go 1.27.0
 github.com/bborbe/collection
-# github.com/bborbe/cron v1.8.24
-## explicit; go 1.26.5
+# github.com/bborbe/cron v1.8.28
+## explicit; go 1.27.0
 github.com/bborbe/cron
-# github.com/bborbe/errors v1.5.17
-## explicit; go 1.26.5
+# github.com/bborbe/errors v1.6.0
+## explicit; go 1.27.0
 github.com/bborbe/errors
 # github.com/bborbe/io v0.0.0-20180829202151-54b762caaee8
 ## explicit
 github.com/bborbe/io/util
-# github.com/bborbe/lock v1.0.2
-## explicit; go 1.26.5
+# github.com/bborbe/lock v1.0.5
+## explicit; go 1.27.0
 github.com/bborbe/lock
-# github.com/bborbe/math v1.3.18
-## explicit; go 1.26.5
+# github.com/bborbe/math v1.4.8
+## explicit; go 1.27.0
 github.com/bborbe/math
-# github.com/bborbe/parse v1.10.19
-## explicit; go 1.26.5
+# github.com/bborbe/parse v1.11.0
+## explicit; go 1.27.0
 github.com/bborbe/parse
-# github.com/bborbe/run v1.9.34
-## explicit; go 1.26.5
+# github.com/bborbe/run v1.10.1
+## explicit; go 1.27.0
 github.com/bborbe/run
-# github.com/bborbe/time v1.27.8
-## explicit; go 1.26.5
+# github.com/bborbe/time v1.27.11
+## explicit; go 1.27.0
 github.com/bborbe/time
-# github.com/bborbe/validation v1.4.18
-## explicit; go 1.26.5
+# github.com/bborbe/validation v1.4.23
+## explicit; go 1.27.0
 github.com/bborbe/validation
 # github.com/beorn7/perks v1.0.1
 ## explicit; go 1.11
@@ -39,7 +39,7 @@ github.com/beorn7/perks/quantile
 # github.com/cespare/xxhash/v2 v2.3.0
 ## explicit; go 1.11
 github.com/cespare/xxhash/v2
-# github.com/getsentry/sentry-go v0.48.0
+# github.com/getsentry/sentry-go v0.49.0
 ## explicit; go 1.25.0
 github.com/getsentry/sentry-go
 github.com/getsentry/sentry-go/attribute
@@ -54,7 +54,7 @@ github.com/getsentry/sentry-go/internal/ratelimit
 github.com/getsentry/sentry-go/internal/telemetry
 github.com/getsentry/sentry-go/internal/util
 github.com/getsentry/sentry-go/report
-# github.com/go-logr/logr v1.4.3
+# github.com/go-logr/logr v1.4.4
 ## explicit; go 1.18
 github.com/go-logr/logr
 github.com/go-logr/logr/funcr
@@ -73,8 +73,8 @@ github.com/google/go-cmp/cmp/internal/diff
 github.com/google/go-cmp/cmp/internal/flags
 github.com/google/go-cmp/cmp/internal/function
 github.com/google/go-cmp/cmp/internal/value
-# github.com/google/pprof v0.0.0-20260507013755-92041b743c96
-## explicit; go 1.24.0
+# github.com/google/pprof v0.0.0-20260802141513-ef3492d7dac3
+## explicit; go 1.25.0
 github.com/google/pprof/profile
 # github.com/inconshreveable/mousetrap v1.1.0
 ## explicit; go 1.18
@@ -135,21 +135,21 @@ github.com/prometheus/client_model/go
 ## explicit; go 1.25.0
 github.com/prometheus/common/expfmt
 github.com/prometheus/common/model
-# github.com/prometheus/procfs v0.21.1
+# github.com/prometheus/procfs v0.22.0
 ## explicit; go 1.25.0
 github.com/prometheus/procfs
 github.com/prometheus/procfs/internal/fs
-github.com/prometheus/procfs/internal/util
+github.com/prometheus/procfs/internal/parsers
 # github.com/robfig/cron/v3 v3.0.1
 ## explicit; go 1.12
 github.com/robfig/cron/v3
 # github.com/spf13/cobra v1.10.2
 ## explicit; go 1.15
 github.com/spf13/cobra
-# github.com/spf13/pflag v1.0.9
+# github.com/spf13/pflag v1.0.10
 ## explicit; go 1.12
 github.com/spf13/pflag
-# go.yaml.in/yaml/v3 v3.0.4
+# go.yaml.in/yaml/v3 v3.0.5
 ## explicit; go 1.16
 go.yaml.in/yaml/v3
 # golang.org/x/mod v0.40.0
