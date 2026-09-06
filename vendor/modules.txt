@@ -3,14 +3,14 @@
 github.com/Masterminds/semver/v3
 # github.com/bborbe/assert v0.0.0-20181116222016-22a6c6341415
 ## explicit
-# github.com/bborbe/collection v1.20.25
+# github.com/bborbe/collection v1.20.26
 ## explicit; go 1.27.0
 github.com/bborbe/collection
-# github.com/bborbe/cron v1.8.28
-## explicit; go 1.27.0
+# github.com/bborbe/cron v1.8.31
+## explicit; go 1.27.1
 github.com/bborbe/cron
-# github.com/bborbe/errors v1.6.0
-## explicit; go 1.27.0
+# github.com/bborbe/errors v1.6.1
+## explicit; go 1.27.1
 github.com/bborbe/errors
 # github.com/bborbe/io v0.0.0-20180829202151-54b762caaee8
 ## explicit
@@ -21,16 +21,16 @@ github.com/bborbe/lock
 # github.com/bborbe/math v1.4.8
 ## explicit; go 1.27.0
 github.com/bborbe/math
-# github.com/bborbe/parse v1.11.0
-## explicit; go 1.27.0
+# github.com/bborbe/parse v1.11.3
+## explicit; go 1.27.1
 github.com/bborbe/parse
-# github.com/bborbe/run v1.10.1
+# github.com/bborbe/run v1.10.2
 ## explicit; go 1.27.0
 github.com/bborbe/run
-# github.com/bborbe/time v1.27.11
-## explicit; go 1.27.0
+# github.com/bborbe/time v1.27.14
+## explicit; go 1.27.1
 github.com/bborbe/time
-# github.com/bborbe/validation v1.4.23
+# github.com/bborbe/validation v1.5.0
 ## explicit; go 1.27.0
 github.com/bborbe/validation
 # github.com/beorn7/perks v1.0.1
@@ -73,7 +73,7 @@ github.com/google/go-cmp/cmp/internal/diff
 github.com/google/go-cmp/cmp/internal/flags
 github.com/google/go-cmp/cmp/internal/function
 github.com/google/go-cmp/cmp/internal/value
-# github.com/google/pprof v0.0.0-20260802141513-ef3492d7dac3
+# github.com/google/pprof v0.0.0-20260902005441-ca85771921e4
 ## explicit; go 1.25.0
 github.com/google/pprof/profile
 # github.com/inconshreveable/mousetrap v1.1.0
@@ -106,7 +106,7 @@ github.com/onsi/ginkgo/v2/internal/reporters
 github.com/onsi/ginkgo/v2/internal/testingtproxy
 github.com/onsi/ginkgo/v2/reporters
 github.com/onsi/ginkgo/v2/types
-# github.com/onsi/gomega v1.42.1
+# github.com/onsi/gomega v1.43.0
 ## explicit; go 1.25.0
 github.com/onsi/gomega
 github.com/onsi/gomega/format
@@ -128,10 +128,10 @@ github.com/pkg/errors
 ## explicit; go 1.25.0
 github.com/prometheus/client_golang/prometheus
 github.com/prometheus/client_golang/prometheus/internal
-# github.com/prometheus/client_model v0.6.2
-## explicit; go 1.22.0
+# github.com/prometheus/client_model v0.6.3
+## explicit; go 1.23
 github.com/prometheus/client_model/go
-# github.com/prometheus/common v0.70.1
+# github.com/prometheus/common v0.71.0
 ## explicit; go 1.25.0
 github.com/prometheus/common/expfmt
 github.com/prometheus/common/model

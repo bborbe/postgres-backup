@@ -8,6 +8,18 @@ Please choose versions by [Semantic Versioning](http://semver.org/).
 * MINOR version when you add functionality in a backwards-compatible manner, and
 * PATCH version when you make backwards-compatible bug fixes.
 
+## v1.8.31
+
+- chore: update Go to 1.27.1
+
+## v1.8.30
+
+- chore: update github.com/bborbe/run to v1.10.2, github.com/bborbe/sentry to v1.10.1, github.com/bborbe/service to v1.10.11, github.com/bborbe/time to v1.27.12, github.com/onsi/gomega to v1.43.0
+
+## v1.8.29
+
+- chore: update github.com/bborbe/errors to v1.6.0, github.com/bborbe/run to v1.10.1, github.com/bborbe/sentry to v1.10.0, github.com/bborbe/service to v1.10.10, github.com/bborbe/time to v1.27.11
+
 ## v1.8.28
 
 - chore: update github.com/bborbe/errors to v1.5.21, github.com/bborbe/sentry to v1.9.27
