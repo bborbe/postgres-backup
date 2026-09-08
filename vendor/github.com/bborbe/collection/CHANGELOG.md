@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## v1.20.27
+
+- chore: update Go to 1.27.1 and github.com/bborbe/errors to v1.6.1, github.com/bborbe/run to v1.10.3
+
+## v1.20.26
+
+- chore: update github.com/bborbe/errors to v1.6.0, github.com/bborbe/run to v1.10.2
+
 ## v1.20.25
 
 - chore: update github.com/bborbe/errors to v1.5.21
