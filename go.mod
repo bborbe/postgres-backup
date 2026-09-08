@@ -1,6 +1,6 @@
 module github.com/bborbe/postgres-backup
 
-go 1.27.0
+go 1.27.1
 
 replace (
 	github.com/coreos/bbolt v1.3.10 => go.etcd.io/bbolt v1.3.10
