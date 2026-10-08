@@ -8,6 +8,26 @@ Please choose versions by [Semantic Versioning](http://semver.org/).
 * MINOR version when you add functionality in a backwards-compatible manner, and
 * PATCH version when you make backwards-compatible bug fixes.
 
+## v1.12.0
+
+- feat: add .reviewignore for the PR size gate
+
+## v1.11.4
+
+- chore: update github.com/bborbe/errors to v1.6.1
+
+## v1.11.3
+
+- chore: update Go to 1.27.1
+
+## v1.11.2
+
+- chore: update go module dependencies
+
+## v1.11.1
+
+- chore: update github.com/bborbe/errors to v1.6.0, github.com/bborbe/math to v1.4.8
+
 ## v1.11.0
 
 - feat: opt into `autoMerge.trivial` for mechanically-trivial update PRs
