@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 2.1.5
 
 - chore: update github.com/bborbe/cron to v1.9.0, github.com/bborbe/errors to v1.6.1, github.com/bborbe/lock to v1.0.6, github.com/bborbe/run to v1.11.0, github.com/bborbe/time to v1.27.14, github.com/onsi/gomega to v1.43.0
 
