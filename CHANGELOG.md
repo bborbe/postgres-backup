@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+- chore: update github.com/bborbe/cron to v1.9.0, github.com/bborbe/errors to v1.6.1, github.com/bborbe/lock to v1.0.6, github.com/bborbe/run to v1.11.0, github.com/bborbe/time to v1.27.14, github.com/onsi/gomega to v1.43.0
+
 ## 2.1.4
 
 - fix: `make build` refuses to stamp a version onto a tree that is not that version's tag (`check-version-tag`, escape hatch `ALLOW_UNTAGGED_BUILD=1`). `VERSION` defaults to the newest tag repo-wide, so an operator-run build from an untagged or older tree silently republishes under the newest tag. The guard compares `git describe --exact-match HEAD` against `$(VERSION)` and exits non-zero on mismatch.

@@ -8,6 +8,18 @@ Please choose versions by [Semantic Versioning](http://semver.org/).
 * MINOR version when you add functionality in a backwards-compatible manner, and
 * PATCH version when you make backwards-compatible bug fixes.
 
+## v1.11.0
+
+- feat: add .reviewignore for the PR size gate
+
+## v1.10.3
+
+- chore: update Go to 1.27.1 and github.com/bborbe/errors to v1.6.1
+
+## v1.10.2
+
+- chore: update go module dependencies
+
 ## v1.10.1
 
 - chore: update Go to 1.27.0 and github.com/bborbe/errors to v1.6.0, github.com/getsentry/sentry-go to v0.49.0
